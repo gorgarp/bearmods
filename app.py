@@ -7,25 +7,6 @@ import zipfile
 import datetime
 import traceback
 from pathlib import Path
-
-def excepthook(exctype, value, tb):
-    text = "".join(traceback.format_exception(exctype, value, tb))
-    try:
-        with open("updater_crash.log", "a", encoding="utf-8") as f:
-            f.write(text + "\n" + "-"*60 + "\n")
-    except Exception:
-        pass
-    try:
-        from PySide6.QtWidgets import QApplication, QMessageBox
-        app = QApplication.instance()
-        if app is None:
-            app = QApplication(sys.argv)
-        QMessageBox.critical(None, "Fatal Error", f"An unhandled error occurred:\n{value}\n\n{text[:4000]}")
-    except Exception:
-        pass
-    sys.exit(1)
-sys.excepthook = excepthook
-
 from PySide6.QtCore import Qt, Signal, QThread, Slot
 from PySide6.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel,
